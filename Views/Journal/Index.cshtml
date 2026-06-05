@@ -1,14 +1,16 @@
+@using DanialNetAccount.Services
+@inject LocalizationService Loc
 @model IEnumerable<DanialNetAccount.Models.JournalEntry>
 
 @{
-    ViewData["Title"] = "Journal";
+    ViewData["Title"] = Loc.Translate("Journal");
 }
 
 <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">General Journal</h1>
+    <h1 class="text-3xl font-bold text-gray-900">@Loc.Translate("General Journal")</h1>
     <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition flex items-center">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        New Entry
+        @Loc.Translate("New Entry")
     </a>
 </div>
 
@@ -16,10 +18,10 @@
     <table class="w-full text-left border-collapse">
         <thead>
             <tr class="bg-gray-50 border-b border-gray-100">
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Date</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Description</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-right">Debit</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-right">Credit</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">@Loc.Translate("Date")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">@Loc.Translate("Description")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">@Loc.Translate("Debit")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">@Loc.Translate("Credit")</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -31,14 +33,14 @@
                 </tr>
                 @foreach (var line in entry.Lines)
                 {
-                    <tr>
+                    <tr class="hover:bg-gray-50/30 transition">
                         <td></td>
-                        <td class="px-6 py-3 text-gray-600 @(line.Credit > 0 ? "pl-12" : "")">@line.Account?.Name</td>
-                        <td class="px-6 py-3 text-right font-mono @(line.Debit > 0 ? "text-green-600" : "text-gray-300")">
-                            @(line.Debit > 0 ? line.Debit.ToString("N2") : "-")
+                        <td class="px-6 py-3 text-gray-600 @(line.Credit > 0 ? (Loc.GetDirection() == "rtl" ? "pr-12" : "pl-12") : "")">@line.Account?.Name</td>
+                        <td class="px-6 py-3 text-right font-mono @(line.Debit > 0 ? "text-green-600 font-bold" : "text-gray-300")">
+                            @(line.Debit > 0 ? Loc.FormatCurrency(line.Debit) : "-")
                         </td>
-                        <td class="px-6 py-3 text-right font-mono @(line.Credit > 0 ? "text-red-600" : "text-gray-300")">
-                            @(line.Credit > 0 ? line.Credit.ToString("N2") : "-")
+                        <td class="px-6 py-3 text-right font-mono @(line.Credit > 0 ? "text-red-600 font-bold" : "text-gray-300")">
+                            @(line.Credit > 0 ? Loc.FormatCurrency(line.Credit) : "-")
                         </td>
                     </tr>
                 }

@@ -1,28 +1,30 @@
+@using DanialNetAccount.Services
+@inject LocalizationService Loc
 @model DanialNetAccount.Models.GlobalSetting
 @using DanialNetAccount.Models.Enums
 @using DanialNetAccount.Models
 
 @{
-    ViewData["Title"] = "System Settings";
+    ViewData["Title"] = Loc.Translate("Settings");
 }
 
 <div class="max-w-3xl mx-auto">
-    <div class="flex items-center space-x-4 mb-8">
+    <div class="flex items-center space-x-4 mb-8 @(Loc.GetDirection() == "rtl" ? "space-x-reverse" : "")">
         <div class="p-3 bg-blue-600 rounded-2xl text-white">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900">System Configuration</h1>
+        <h1 class="text-3xl font-bold text-gray-900">@Loc.Translate("System Configuration")</h1>
     </div>
 
     <form asp-action="Update" class="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
         <div class="p-8 space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Company Name</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">@Loc.Translate("Company Name")</label>
                     <input asp-for="CompanyName" class="block w-full border-gray-300 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" />
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Business Type</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">@Loc.Translate("Business Type")</label>
                     <select asp-for="StoreType" class="block w-full border-gray-300 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" asp-items="Html.GetEnumSelectList<StoreType>()"></select>
                 </div>
             </div>
@@ -30,11 +32,11 @@
             <div class="pt-8 border-t border-gray-100">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Language</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">@Loc.Translate("Language")</label>
                         <select asp-for="Language" class="block w-full border-gray-300 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition" asp-items="Html.GetEnumSelectList<AppLanguage>()"></select>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Currency</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">@Loc.Translate("Currency")</label>
                         <select asp-for="Currency" class="block w-full border-gray-300 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition" asp-items="Html.GetEnumSelectList<CurrencyType>()"></select>
                     </div>
                 </div>
@@ -43,14 +45,14 @@
             <div class="pt-8 border-t border-gray-100">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Valuation Method</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">@Loc.Translate("Valuation Method")</label>
                         <select asp-for="ValuationMethod" class="block w-full border-gray-300 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" asp-items="Html.GetEnumSelectList<InventoryValuationMethod>()"></select>
-                        <p class="mt-2 text-xs text-gray-400">Determines how COGS is calculated for new sales.</p>
+                        <p class="mt-2 text-xs text-gray-400">@Loc.Translate("Valuation Hint")</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Lock Period (Until)</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">@Loc.Translate("Lock Period (Until)")</label>
                         <input asp-for="ClosedUntilDate" class="block w-full border-gray-300 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" type="date" />
-                        <p class="mt-2 text-xs text-gray-400">Prevents modifications to transactions before this date.</p>
+                        <p class="mt-2 text-xs text-gray-400">@Loc.Translate("Lock Hint")</p>
                     </div>
                 </div>
             </div>
@@ -58,7 +60,7 @@
 
         <div class="bg-gray-50 px-8 py-6 flex justify-end">
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-xl shadow-lg transition transform active:scale-95">
-                Apply Settings
+                @Loc.Translate("Apply Settings")
             </button>
         </div>
     </form>

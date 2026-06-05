@@ -1,27 +1,51 @@
+@using DanialNetAccount.Services
+@inject LocalizationService Loc
 @model IEnumerable<DanialNetAccount.Models.Invoice>
 
 @{
-    ViewData["Title"] = "Invoices";
+    ViewData["Title"] = Loc.Translate("Invoices");
 }
 
-<div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Invoices</h1>
-    <a asp-action="Create" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition flex items-center">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        New Invoice
-    </a>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <h1 class="text-3xl font-bold text-gray-900">@Loc.Translate("Invoices")</h1>
+
+    <div class="flex space-x-2 @(Loc.GetDirection() == "rtl" ? "space-x-reverse" : "")">
+        <a asp-action="Create" asp-route-type="Sale" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition flex items-center">
+            <svg class="w-5 h-5 @(Loc.GetDirection() == "rtl" ? "ml-2" : "mr-2")" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            @Loc.Translate("New Invoice")
+        </a>
+        <a asp-action="Create" asp-route-type="Purchase" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition flex items-center">
+            <svg class="w-5 h-5 @(Loc.GetDirection() == "rtl" ? "ml-2" : "mr-2")" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            @Loc.Translate("Purchase Invoice")
+        </a>
+    </div>
+</div>
+
+<div class="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 mb-8">
+    <form method="get" class="flex flex-wrap gap-4 items-center">
+        <div class="flex-1 min-w-[200px]">
+            <input type="text" name="search" placeholder="@Loc.Translate("Search by number or customer")..." class="w-full border-gray-200 rounded-xl py-2 px-4 bg-gray-50 border focus:ring-2 focus:ring-green-500 transition" />
+        </div>
+        <select name="type" class="border-gray-200 rounded-xl py-2 px-4 bg-gray-50 border">
+            <option value="">@Loc.Translate("All Types")</option>
+            <option value="Sale">@Loc.Translate("Sales Only")</option>
+            <option value="Purchase">@Loc.Translate("Purchases Only")</option>
+        </select>
+        <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-xl hover:bg-black transition">@Loc.Translate("Filter")</button>
+    </form>
 </div>
 
 <div class="bg-white shadow-sm border border-gray-100 rounded-xl overflow-hidden">
     <table class="w-full text-left border-collapse">
         <thead>
             <tr class="bg-gray-50 border-b border-gray-100">
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Number</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Date</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-right">Amount</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-center">Status</th>
-                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider"></th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">@Loc.Translate("Number")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">@Loc.Translate("Type")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">@Loc.Translate("Date")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">@Loc.Translate("Customer")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">@Loc.Translate("Amount")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">@Loc.Translate("Status")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider"></th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -29,19 +53,24 @@
             {
                 <tr class="hover:bg-gray-50 transition">
                     <td class="px-6 py-4 font-mono text-sm text-gray-600">@invoice.InvoiceNumber</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded text-xs font-bold @(invoice.Type == DanialNetAccount.Models.InvoiceType.Sale ? "bg-green-50 text-green-600" : "bg-blue-50 text-blue-600")">
+                            @Loc.Translate(invoice.Type.ToString())
+                        </span>
+                    </td>
                     <td class="px-6 py-4 text-gray-700">@invoice.Date.ToShortDateString()</td>
                     <td class="px-6 py-4 font-medium text-gray-900">@invoice.CustomerName</td>
-                    <td class="px-6 py-4 text-right font-bold text-gray-900 font-mono">@invoice.FinalAmount.ToString("N2")</td>
+                    <td class="px-6 py-4 text-right font-bold text-gray-900 font-mono">@Loc.FormatCurrency(invoice.FinalAmount)</td>
                     <td class="px-6 py-4 text-center">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                             @(invoice.Status == DanialNetAccount.Models.InvoiceStatus.Active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
-                            @invoice.Status
+                            @Loc.Translate(invoice.Status.ToString())
                         </span>
                     </td>
                     <td class="px-6 py-4 text-right">
                         <a asp-action="Details" asp-route-id="@invoice.Id" class="text-blue-600 hover:text-blue-900 font-medium transition flex items-center justify-end">
-                            View
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            @Loc.Translate("View")
+                            <svg class="w-4 h-4 @(Loc.GetDirection() == "rtl" ? "mr-1 rotate-180" : "ml-1")" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </a>
                     </td>
                 </tr>

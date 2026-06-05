@@ -1,32 +1,34 @@
+@using DanialNetAccount.Services
+@inject LocalizationService Loc
 @model DanialNetAccount.ViewModels.AccountLedgerViewModel
 
 @{
-    ViewData["Title"] = $"Ledger - {Model.AccountName}";
+    ViewData["Title"] = $"{Loc.Translate("Ledger")} - {Model.AccountName}";
 }
 
 <div class="mb-8">
-    <div class="flex items-center space-x-3 text-gray-500 mb-2">
-        <a asp-controller="Account" asp-action="Index" class="hover:text-blue-600 transition">Chart of Accounts</a>
+    <div class="flex items-center space-x-3 text-gray-500 mb-2 @(Loc.GetDirection() == "rtl" ? "space-x-reverse" : "")">
+        <a asp-controller="Account" asp-action="Index" class="hover:text-blue-600 transition">@Loc.Translate("Chart of Accounts")</a>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-        <span class="font-bold text-gray-900">Account Ledger</span>
+        <span class="font-bold text-gray-900">@Loc.Translate("Account Ledger")</span>
     </div>
-    <h1 class="text-3xl font-bold text-gray-900 italic">@Model.AccountCode &mdash; @Model.AccountName</h1>
+    <h1 class="text-3xl font-bold text-gray-900">@Model.AccountCode &mdash; @Model.AccountName</h1>
 </div>
 
 <div class="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden p-8 mb-8">
     <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
         <input type="hidden" name="id" value="@Model.AccountId" />
         <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">From Date</label>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">@Loc.Translate("From Date")</label>
             <input type="date" name="fromDate" class="block w-full border-gray-200 rounded-xl py-2.5 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition" />
         </div>
         <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">To Date</label>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">@Loc.Translate("To Date")</label>
             <input type="date" name="toDate" class="block w-full border-gray-200 rounded-xl py-2.5 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition" />
         </div>
         <div>
             <button type="submit" class="bg-gray-900 hover:bg-black text-white font-bold py-2.5 px-8 rounded-xl transition shadow-lg w-full">
-                Filter Ledger
+                @Loc.Translate("Filter Ledger")
             </button>
         </div>
     </form>
@@ -36,11 +38,11 @@
     <table class="w-full text-left border-collapse">
         <thead>
             <tr class="bg-gray-50 border-b border-gray-100">
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Date</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Description</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Debit</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Credit</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Running Balance</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">@Loc.Translate("Date")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">@Loc.Translate("Description")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">@Loc.Translate("Debit")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">@Loc.Translate("Credit")</th>
+                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">@Loc.Translate("Running Balance")</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -50,21 +52,21 @@
                     <td class="px-6 py-4 text-gray-600">@line.Date.ToShortDateString()</td>
                     <td class="px-6 py-4 font-medium text-gray-900">@line.Description</td>
                     <td class="px-6 py-4 text-right font-mono @(line.Debit > 0 ? "text-green-600 font-bold" : "text-gray-300")">
-                        @(line.Debit > 0 ? line.Debit.ToString("N2") : "-")
+                        @(line.Debit > 0 ? Loc.FormatCurrency(line.Debit) : "-")
                     </td>
                     <td class="px-6 py-4 text-right font-mono @(line.Credit > 0 ? "text-red-600 font-bold" : "text-gray-300")">
-                        @(line.Credit > 0 ? line.Credit.ToString("N2") : "-")
+                        @(line.Credit > 0 ? Loc.FormatCurrency(line.Credit) : "-")
                     </td>
                     <td class="px-6 py-4 text-right font-mono font-black text-gray-900 bg-gray-50/30">
-                        @line.RunningBalance.ToString("N2")
+                        @Loc.FormatCurrency(line.RunningBalance)
                     </td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr class="bg-blue-600 text-white">
-                <th colspan="4" class="px-6 py-6 text-lg font-bold uppercase tracking-[0.2em]">Closing Balance</th>
-                <th class="px-6 py-6 text-right text-2xl font-black font-mono">@Model.ClosingBalance.ToString("N2")</th>
+                <th colspan="4" class="px-6 py-6 text-lg font-bold uppercase tracking-[0.2em]">@Loc.Translate("Closing Balance")</th>
+                <th class="px-6 py-6 text-right text-2xl font-black font-mono">@Loc.FormatCurrency(Model.ClosingBalance)</th>
             </tr>
         </tfoot>
     </table>

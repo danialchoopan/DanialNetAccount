@@ -6,6 +6,7 @@ namespace DanialNetAccount.ViewModels
     {
         public string CustomerName { get; set; } = string.Empty;
         public DateTime Date { get; set; } = DateTime.Now;
+        public InvoiceType Type { get; set; } = InvoiceType.Sale;
         public List<InvoiceItemViewModel> Items { get; set; } = new List<InvoiceItemViewModel>();
     }
 

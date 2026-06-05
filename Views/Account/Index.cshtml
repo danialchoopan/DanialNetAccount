@@ -1,13 +1,15 @@
+@using DanialNetAccount.Services
+@inject LocalizationService Loc
 @model IEnumerable<DanialNetAccount.Models.Account>
 
 @{
-    ViewData["Title"] = "Chart of Accounts";
+    ViewData["Title"] = Loc.Translate("Chart of Accounts");
 }
 
 <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Chart of Accounts</h1>
+    <h1 class="text-3xl font-bold text-gray-900">@Loc.Translate("Chart of Accounts")</h1>
     <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition">
-        Create New Account
+        @Loc.Translate("Create New Account")
     </a>
 </div>
 
