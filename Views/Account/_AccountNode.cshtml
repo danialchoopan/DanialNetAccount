@@ -1,0 +1,21 @@
+@model DanialNetAccount.Models.Account
+
+<li class="list-group-item">
+    @if (Model.Children != null && Model.Children.Any())
+    {
+        <span class="toggle-children">[+]</span>
+    }
+    <strong>@Model.Code</strong> -
+    <a asp-controller="Report" asp-action="AccountLedger" asp-route-id="@Model.Id">@Model.Name</a>
+    (@Model.Type)
+
+    @if (Model.Children != null && Model.Children.Any())
+    {
+        <ul style="display:none;">
+            @foreach (var child in Model.Children.OrderBy(c => c.Code))
+            {
+                @await Html.PartialAsync("_AccountNode", child)
+            }
+        </ul>
+    }
+</li>

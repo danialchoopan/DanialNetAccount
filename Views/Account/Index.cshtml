@@ -1,0 +1,46 @@
+@model IEnumerable<DanialNetAccount.Models.Account>
+
+@{
+    ViewData["Title"] = "Chart of Accounts";
+}
+
+<h1>Chart of Accounts</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Account</a>
+</p>
+
+<div class="treeview">
+    <ul class="list-group">
+        @foreach (var account in Model)
+        {
+            @await Html.PartialAsync("_AccountNode", account)
+        }
+    </ul>
+</div>
+
+@section Styles {
+    <style>
+        .treeview ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        .treeview .list-group-item {
+            border: none;
+            padding: 5px 10px;
+        }
+        .toggle-children {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).on('click', '.toggle-children', function() {
+            $(this).siblings('ul').toggle();
+            $(this).text($(this).text() == '[+]' ? '[-]' : '[+]');
+        });
+    </script>
+}

@@ -1,0 +1,83 @@
+@model DanialNetAccount.ViewModels.BalanceSheetReport
+
+@{
+    ViewData["Title"] = "Balance Sheet";
+}
+
+<h1>Balance Sheet</h1>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white"><h3>Assets</h3></div>
+            <div class="card-body">
+                <table class="table">
+                    @foreach (var line in Model.AssetLines)
+                    {
+                        <tr>
+                            <td>@line.AccountName</td>
+                            <td class="text-end">@line.Balance.ToString("N2")</td>
+                        </tr>
+                    }
+                    <tr class="table-info">
+                        <th>Total Assets</th>
+                        <th class="text-end">@Model.TotalAssets.ToString("N2")</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-warning"><h3>Liabilities</h3></div>
+            <div class="card-body">
+                <table class="table">
+                    @foreach (var line in Model.LiabilityLines)
+                    {
+                        <tr>
+                            <td>@line.AccountName</td>
+                            <td class="text-end">@line.Balance.ToString("N2")</td>
+                        </tr>
+                    }
+                    <tr class="table-info">
+                        <th>Total Liabilities</th>
+                        <th class="text-end">@Model.TotalLiabilities.ToString("N2")</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-success text-white"><h3>Equity</h3></div>
+            <div class="card-body">
+                <table class="table">
+                    @foreach (var line in Model.EquityLines)
+                    {
+                        <tr>
+                            <td>@line.AccountName</td>
+                            <td class="text-end">@line.Balance.ToString("N2")</td>
+                        </tr>
+                    }
+                    <tr class="table-info">
+                        <th>Total Equity</th>
+                        <th class="text-end">@Model.TotalEquity.ToString("N2")</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mt-3 bg-light">
+            <div class="card-body d-flex justify-content-between">
+                <strong>Total Liabilities & Equity:</strong>
+                <strong>@Model.TotalLiabilitiesAndEquity.ToString("N2")</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.TotalAssets != Model.TotalLiabilitiesAndEquity)
+{
+    <div class="alert alert-danger mt-4">
+        Warning: Balance Sheet is not balanced! Difference: @((Model.TotalAssets - Model.TotalLiabilitiesAndEquity).ToString("N2"))
+    </div>
+}

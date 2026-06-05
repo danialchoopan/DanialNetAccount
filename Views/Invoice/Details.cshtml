@@ -1,0 +1,88 @@
+@model DanialNetAccount.Models.Invoice
+
+@{
+    ViewData["Title"] = "Invoice Details";
+}
+
+<div id="printArea">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>DANIAL NET ACCOUNT</h1>
+            <h2>OFFICIAL INVOICE</h2>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-6">
+            <p><strong>Invoice #:</strong> @Model.InvoiceNumber</p>
+            <p><strong>Date:</strong> @Model.Date.ToShortDateString()</p>
+            <p><strong>Status:</strong>
+                <span class="badge @(Model.Status == DanialNetAccount.Models.InvoiceStatus.Active ? "bg-success" : "bg-danger")">
+                    @Model.Status
+                </span>
+            </p>
+        </div>
+        <div class="col-6 text-end">
+            <p><strong>Customer:</strong> @Model.CustomerName</p>
+        </div>
+    </div>
+
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Product?.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("N2")</td>
+                    <td>@item.TotalPrice.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Subtotal</strong></td>
+                <td>@Model.TotalAmount.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Tax (9%)</strong></td>
+                <td>@Model.TaxAmount.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Final Total</strong></td>
+                <td><strong>@Model.FinalAmount.ToString("N2")</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="mt-4 no-print">
+    <button onclick="window.print()" class="btn btn-primary">Print Invoice</button>
+    <a asp-action="Download" asp-route-id="@Model.Id" class="btn btn-success">Download HTML</a>
+
+    @if (Model.Status == DanialNetAccount.Models.InvoiceStatus.Active)
+    {
+        <form asp-action="Void" asp-route-id="@Model.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to void this invoice?');">
+            <button type="submit" class="btn btn-danger">Void Invoice</button>
+        </form>
+    }
+
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Styles {
+    <style>
+        @@media print {
+            .no-print { display: none; }
+            body { padding: 20px; }
+        }
+    </style>
+}

@@ -1,0 +1,43 @@
+@model IEnumerable<DanialNetAccount.Models.Invoice>
+
+@{
+    ViewData["Title"] = "Invoices";
+}
+
+<h1>Invoices</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Invoice</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var invoice in Model)
+        {
+            <tr>
+                <td>@invoice.InvoiceNumber</td>
+                <td>@invoice.Date.ToShortDateString()</td>
+                <td>@invoice.CustomerName</td>
+                <td>@invoice.FinalAmount.ToString("N2")</td>
+                <td>
+                    <span class="badge @(invoice.Status == DanialNetAccount.Models.InvoiceStatus.Active ? "bg-success" : "bg-danger")">
+                        @invoice.Status
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@invoice.Id" class="btn btn-sm btn-info">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

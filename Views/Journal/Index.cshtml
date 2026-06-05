@@ -1,0 +1,38 @@
+@model IEnumerable<DanialNetAccount.Models.JournalEntry>
+
+@{
+    ViewData["Title"] = "Journal Entries";
+}
+
+<h1>Journal Entries</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Entry</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Lines (Account: Debit / Credit)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model)
+        {
+            <tr>
+                <td>@entry.Date.ToShortDateString()</td>
+                <td>@entry.Description</td>
+                <td>
+                    <ul class="list-unstyled">
+                        @foreach (var line in entry.Lines)
+                        {
+                            <li>@line.Account?.Name: @line.Debit.ToString("N2") / @line.Credit.ToString("N2")</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

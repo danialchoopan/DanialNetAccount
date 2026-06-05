@@ -1,0 +1,40 @@
+@model DanialNetAccount.ViewModels.TrialBalanceReport
+
+@{
+    ViewData["Title"] = "Trial Balance";
+}
+
+<h1>Trial Balance</h1>
+
+<div class="mb-3">
+    <a asp-controller="Report" asp-action="ClearCache" class="btn btn-warning">Refresh Data</a>
+</div>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Code</th>
+            <th>Account Name</th>
+            <th>Debit</th>
+            <th>Credit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Lines)
+        {
+            <tr>
+                <td>@line.AccountCode</td>
+                <td>@line.AccountName</td>
+                <td>@line.Debit.ToString("N2")</td>
+                <td>@line.Credit.ToString("N2")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot class="table-secondary">
+        <tr>
+            <th colspan="2">Total</th>
+            <th>@Model.TotalDebit.ToString("N2")</th>
+            <th>@Model.TotalCredit.ToString("N2")</th>
+        </tr>
+    </tfoot>
+</table>
