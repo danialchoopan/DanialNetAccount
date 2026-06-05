@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using DanialNetAccount.Data;
+using DanialNetAccount.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<DanialNetAccount.Services.Inventory.InventoryService>();
 builder.Services.AddScoped<DanialNetAccount.Services.Reports.ReportService>();
+
+// Register LocalizationService with settings
+builder.Services.AddScoped<LocalizationService>(sp => {
+    var context = sp.GetRequiredService<ApplicationDbContext>();
+    var settings = context.Settings.FirstOrDefault() ?? new DanialNetAccount.Models.GlobalSetting();
+    return new LocalizationService(settings);
+});
 
 var app = builder.Build();
 

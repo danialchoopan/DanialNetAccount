@@ -11,6 +11,18 @@ namespace DanialNetAccount.Models
         Manufacturing
     }
 
+    public enum AppLanguage
+    {
+        English,
+        Persian
+    }
+
+    public enum CurrencyType
+    {
+        USD,
+        Toman
+    }
+
     public class GlobalSetting
     {
         public int Id { get; set; }
@@ -18,6 +30,8 @@ namespace DanialNetAccount.Models
         public DateTime? ClosedUntilDate { get; set; }
         public StoreType StoreType { get; set; } = StoreType.Retail;
         public string CompanyName { get; set; } = "DanialNet Account";
+        public AppLanguage Language { get; set; } = AppLanguage.English;
+        public CurrencyType Currency { get; set; } = CurrencyType.USD;
     }
 
     public class Account
