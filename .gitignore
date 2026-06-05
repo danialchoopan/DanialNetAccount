@@ -3,4 +3,8 @@
 *.db
 *.db-shm
 *.db-wal
+.DS_Store
+.env
+*.log
+/tmp/
 /home/jules/verification/

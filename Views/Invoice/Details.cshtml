@@ -1,88 +1,102 @@
 @model DanialNetAccount.Models.Invoice
 
 @{
-    ViewData["Title"] = "Invoice Details";
+    ViewData["Title"] = $"Invoice {Model.InvoiceNumber}";
 }
 
-<div id="printArea">
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1>DANIAL NET ACCOUNT</h1>
-            <h2>OFFICIAL INVOICE</h2>
-        </div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col-6">
-            <p><strong>Invoice #:</strong> @Model.InvoiceNumber</p>
-            <p><strong>Date:</strong> @Model.Date.ToShortDateString()</p>
-            <p><strong>Status:</strong>
-                <span class="badge @(Model.Status == DanialNetAccount.Models.InvoiceStatus.Active ? "bg-success" : "bg-danger")">
+<div class="max-w-4xl mx-auto bg-white shadow-xl border border-gray-100 rounded-2xl overflow-hidden mb-12">
+    <div id="printArea" class="p-12">
+        <div class="flex justify-between items-start mb-12">
+            <div>
+                <h1 class="text-4xl font-extrabold text-blue-600 mb-2 tracking-tight">DANIAL NET ACCOUNT</h1>
+                <p class="text-gray-500 uppercase tracking-widest font-bold">Official Invoice</p>
+            </div>
+            <div class="text-right">
+                <div class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider
+                    @(Model.Status == DanialNetAccount.Models.InvoiceStatus.Active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700")">
                     @Model.Status
-                </span>
-            </p>
+                </div>
+            </div>
         </div>
-        <div class="col-6 text-end">
-            <p><strong>Customer:</strong> @Model.CustomerName</p>
+
+        <div class="grid grid-cols-2 gap-12 mb-12">
+            <div>
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Customer Details</h3>
+                <p class="text-xl font-bold text-gray-800">@Model.CustomerName</p>
+            </div>
+            <div class="text-right">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Invoice Info</h3>
+                <p class="text-gray-900 font-bold"># @Model.InvoiceNumber</p>
+                <p class="text-gray-600">@Model.Date.ToLongDateString()</p>
+            </div>
+        </div>
+
+        <table class="w-full text-left mb-12">
+            <thead>
+                <tr class="border-b-2 border-gray-100 text-sm font-bold text-gray-400 uppercase tracking-widest">
+                    <th class="py-4">Product / Description</th>
+                    <th class="py-4 text-center w-20">Qty</th>
+                    <th class="py-4 text-right">Unit Price</th>
+                    <th class="py-4 text-right">Line Total</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td class="py-6 font-bold text-gray-800">@item.Product?.Name</td>
+                        <td class="py-6 text-center text-gray-600">@item.Quantity</td>
+                        <td class="py-6 text-right font-mono text-gray-600">@item.UnitPrice.ToString("N2")</td>
+                        <td class="py-6 text-right font-mono font-bold text-gray-900">@item.TotalPrice.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="flex justify-end">
+            <div class="w-64 space-y-4">
+                <div class="flex justify-between text-gray-500">
+                    <span>Subtotal</span>
+                    <span class="font-mono">@Model.TotalAmount.ToString("N2")</span>
+                </div>
+                <div class="flex justify-between text-gray-500 border-b border-gray-100 pb-4">
+                    <span>Sales Tax (9%)</span>
+                    <span class="font-mono">@Model.TaxAmount.ToString("N2")</span>
+                </div>
+                <div class="flex justify-between text-2xl font-black text-gray-900 pt-2">
+                    <span>Total</span>
+                    <span class="text-blue-600 font-mono">@Model.FinalAmount.ToString("N2")</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-20 pt-12 border-t border-gray-100 text-center text-gray-400 text-sm italic">
+            Thank you for your business! Payments are due within 30 days.
         </div>
     </div>
 
-    <table class="table table-bordered mt-4">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Items)
+    <div class="bg-gray-50 px-12 py-8 flex justify-between items-center no-print border-t border-gray-100">
+        <a asp-action="Index" class="text-gray-500 hover:text-gray-700 font-bold flex items-center transition">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>
+            Back to Invoices
+        </a>
+        <div class="flex space-x-4">
+            <button onclick="window.print()" class="bg-white hover:bg-gray-100 text-gray-800 font-bold py-3 px-8 rounded-xl border border-gray-200 transition flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                Print
+            </button>
+            <a asp-action="Download" asp-route-id="@Model.Id" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Download PDF
+            </a>
+            @if (Model.Status == DanialNetAccount.Models.InvoiceStatus.Active)
             {
-                <tr>
-                    <td>@item.Product?.Name</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.UnitPrice.ToString("N2")</td>
-                    <td>@item.TotalPrice.ToString("N2")</td>
-                </tr>
+                <form asp-action="Void" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('VOID INVOICE: Are you sure? This will reverse all financial impact.');">
+                    <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 px-8 rounded-xl transition border border-red-100">
+                        Void Invoice
+                    </button>
+                </form>
             }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-end"><strong>Subtotal</strong></td>
-                <td>@Model.TotalAmount.ToString("N2")</td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-end"><strong>Tax (9%)</strong></td>
-                <td>@Model.TaxAmount.ToString("N2")</td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-end"><strong>Final Total</strong></td>
-                <td><strong>@Model.FinalAmount.ToString("N2")</strong></td>
-            </tr>
-        </tfoot>
-    </table>
+        </div>
+    </div>
 </div>
-
-<div class="mt-4 no-print">
-    <button onclick="window.print()" class="btn btn-primary">Print Invoice</button>
-    <a asp-action="Download" asp-route-id="@Model.Id" class="btn btn-success">Download HTML</a>
-
-    @if (Model.Status == DanialNetAccount.Models.InvoiceStatus.Active)
-    {
-        <form asp-action="Void" asp-route-id="@Model.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to void this invoice?');">
-            <button type="submit" class="btn btn-danger">Void Invoice</button>
-        </form>
-    }
-
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>
-
-@section Styles {
-    <style>
-        @@media print {
-            .no-print { display: none; }
-            body { padding: 20px; }
-        }
-    </style>
-}

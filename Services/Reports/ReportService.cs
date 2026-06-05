@@ -16,8 +16,12 @@ namespace DanialNetAccount.Services.Reports
 
         public async Task<TrialBalanceReport> GetTrialBalance()
         {
-            var lines = await _context.JournalEntryLines
+            // SQLite doesn't support Sum on decimal in SQL. We fetch to memory first.
+            var allLines = await _context.JournalEntryLines
                 .Include(l => l.Account)
+                .ToListAsync();
+
+            var lines = allLines
                 .GroupBy(l => new { l.Account!.Code, l.Account.Name })
                 .Select(g => new TrialBalanceLine
                 {
@@ -27,7 +31,7 @@ namespace DanialNetAccount.Services.Reports
                     Credit = g.Sum(x => x.Credit)
                 })
                 .OrderBy(l => l.AccountCode)
-                .ToListAsync();
+                .ToList();
 
             return new TrialBalanceReport
             {
@@ -39,7 +43,11 @@ namespace DanialNetAccount.Services.Reports
 
         public async Task<ProfitLossReport> GetProfitLoss()
         {
-            var revenue = await _context.JournalEntryLines
+            var allLines = await _context.JournalEntryLines
+                .Include(l => l.Account)
+                .ToListAsync();
+
+            var revenue = allLines
                 .Where(l => l.Account!.Type == AccountType.Revenue)
                 .GroupBy(l => l.Account!.Name)
                 .Select(g => new ProfitLossLine
@@ -47,9 +55,9 @@ namespace DanialNetAccount.Services.Reports
                     AccountName = g.Key,
                     Amount = g.Sum(x => x.Credit - x.Debit)
                 })
-                .ToListAsync();
+                .ToList();
 
-            var expenses = await _context.JournalEntryLines
+            var expenses = allLines
                 .Where(l => l.Account!.Type == AccountType.Expense)
                 .GroupBy(l => l.Account!.Name)
                 .Select(g => new ProfitLossLine
@@ -57,7 +65,7 @@ namespace DanialNetAccount.Services.Reports
                     AccountName = g.Key,
                     Amount = g.Sum(x => x.Debit - x.Credit)
                 })
-                .ToListAsync();
+                .ToList();
 
             return new ProfitLossReport
             {
@@ -77,7 +85,6 @@ namespace DanialNetAccount.Services.Reports
             var liabilityLines = await GetBalanceSheetLines(AccountType.Liability);
             var equityLines = await GetBalanceSheetLines(AccountType.Equity);
 
-            // Add Retained Earnings (Net Profit) to Equity
             equityLines.Add(new BalanceSheetLine { AccountName = "Net Profit (Current Period)", Balance = netProfit });
 
             return new BalanceSheetReport
@@ -93,8 +100,12 @@ namespace DanialNetAccount.Services.Reports
 
         private async Task<List<BalanceSheetLine>> GetBalanceSheetLines(AccountType type)
         {
-            return await _context.JournalEntryLines
+            var allLines = await _context.JournalEntryLines
+                .Include(l => l.Account)
                 .Where(l => l.Account!.Type == type)
+                .ToListAsync();
+
+            return allLines
                 .GroupBy(l => l.Account!.Name)
                 .Select(g => new BalanceSheetLine
                 {
@@ -102,7 +113,7 @@ namespace DanialNetAccount.Services.Reports
                     Balance = type == AccountType.Asset ? g.Sum(x => x.Debit - x.Credit) : g.Sum(x => x.Credit - x.Debit)
                 })
                 .Where(l => l.Balance != 0)
-                .ToListAsync();
+                .ToList();
         }
 
         public async Task<AccountLedgerViewModel> GetAccountLedger(int accountId, DateTime? fromDate, DateTime? toDate)

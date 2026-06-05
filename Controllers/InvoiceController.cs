@@ -48,7 +48,6 @@ namespace DanialNetAccount.Controllers
             }
             else
             {
-                // Check stock levels
                 foreach (var item in model.Items)
                 {
                     int stock = await _inventoryService.GetStockLevel(item.ProductId);
@@ -97,11 +96,12 @@ namespace DanialNetAccount.Controllers
                         totalCOGS += await _inventoryService.SellProduct(item.ProductId, item.Quantity, strategy, invoice.Id);
                     }
 
-                    var bankAccount = await GetOrCreateAccount("Bank", "111", AccountType.Asset, "11");
-                    var salesAccount = await GetOrCreateAccount("Sales Revenue", "41", AccountType.Revenue, "4");
-                    var cogsAccount = await GetOrCreateAccount("COGS", "51", AccountType.Expense, "5");
-                    var inventoryAccount = await GetOrCreateAccount("Inventory", "12", AccountType.Asset, "1");
-                    var taxAccount = await GetOrCreateAccount("Sales Tax Payable", "21", AccountType.Liability, "2");
+                    // SYNCHRONIZED CODES WITH DBINITIALIZER
+                    var bankAccount = await GetOrCreateAccount("Main Bank Account", "111", AccountType.Asset, "1");
+                    var salesAccount = await GetOrCreateAccount("Sales Revenue", "411", AccountType.Revenue, "4");
+                    var cogsAccount = await GetOrCreateAccount("Cost of Goods Sold", "511", AccountType.Expense, "5");
+                    var inventoryAccount = await GetOrCreateAccount("Inventory", "121", AccountType.Asset, "1");
+                    var taxAccount = await GetOrCreateAccount("Sales Tax Payable", "221", AccountType.Liability, "2");
 
                     var journalEntry = new JournalEntry
                     {
@@ -214,10 +214,8 @@ namespace DanialNetAccount.Controllers
             {
                 invoice.Status = InvoiceStatus.Voided;
 
-                // 1. Restore Inventory
                 await _inventoryService.RestoreProduct(invoice.Id);
 
-                // 2. Reverse Journal Entry
                 var originalJournal = await _context.JournalEntries
                     .Include(j => j.Lines)
                     .FirstOrDefaultAsync(j => j.Description.Contains(invoice.InvoiceNumber));

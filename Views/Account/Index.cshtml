@@ -4,14 +4,15 @@
     ViewData["Title"] = "Chart of Accounts";
 }
 
-<h1>Chart of Accounts</h1>
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Chart of Accounts</h1>
+    <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition">
+        Create New Account
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Account</a>
-</p>
-
-<div class="treeview">
-    <ul class="list-group">
+<div class="bg-white shadow-sm border border-gray-100 rounded-xl overflow-hidden">
+    <ul class="divide-y divide-gray-100">
         @foreach (var account in Model)
         {
             @await Html.PartialAsync("_AccountNode", account)
@@ -19,28 +20,12 @@
     </ul>
 </div>
 
-@section Styles {
-    <style>
-        .treeview ul {
-            list-style: none;
-            padding-left: 20px;
-        }
-        .treeview .list-group-item {
-            border: none;
-            padding: 5px 10px;
-        }
-        .toggle-children {
-            cursor: pointer;
-            margin-right: 5px;
-        }
-    </style>
-}
-
 @section Scripts {
     <script>
         $(document).on('click', '.toggle-children', function() {
-            $(this).siblings('ul').toggle();
-            $(this).text($(this).text() == '[+]' ? '[-]' : '[+]');
+            $(this).parent().siblings('ul').toggleClass('hidden');
+            let svg = $(this).find('svg');
+            svg.toggleClass('rotate-90');
         });
     </script>
 }
