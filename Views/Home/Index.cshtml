@@ -6,71 +6,132 @@
 }
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">@Loc.Translate("Total Sales")</p>
-                <h3 class="text-2xl font-bold mt-1">@Loc.FormatCurrency(45210)</h3>
+                <p class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">@Loc.Translate("Total Sales")</p>
+                <h3 class="text-2xl font-black mt-2 text-gray-900">@Loc.FormatCurrency(45210)</h3>
             </div>
-            <div class="p-3 bg-blue-50 rounded-lg">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <div class="p-4 bg-blue-50 rounded-2xl text-blue-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">@Loc.Translate("Inventory Value")</p>
-                <h3 class="text-2xl font-bold mt-1">@Loc.FormatCurrency(12450)</h3>
+                <p class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">@Loc.Translate("Inventory Value")</p>
+                <h3 class="text-2xl font-black mt-2 text-gray-900">@Loc.FormatCurrency(12450)</h3>
             </div>
-            <div class="p-3 bg-purple-50 rounded-lg">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            <div class="p-4 bg-purple-50 rounded-2xl text-purple-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             </div>
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">@Loc.Translate("Outstanding AP")</p>
-                <h3 class="text-2xl font-bold mt-1 text-red-600">@Loc.FormatCurrency(3200)</h3>
+                <p class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">@Loc.Translate("Outstanding AP")</p>
+                <h3 class="text-2xl font-black mt-2 text-red-600">@Loc.FormatCurrency(3200)</h3>
             </div>
-            <div class="p-3 bg-red-50 rounded-lg">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            <div class="p-4 bg-red-50 rounded-2xl text-red-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
             </div>
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">@Loc.Translate("Net Profit")</p>
-                <h3 class="text-2xl font-bold mt-1 text-green-600">@Loc.FormatCurrency(8940)</h3>
+                <p class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">@Loc.Translate("Net Profit")</p>
+                <h3 class="text-2xl font-black mt-2 text-green-600">@Loc.FormatCurrency(8940)</h3>
             </div>
-            <div class="p-3 bg-green-50 rounded-lg">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+            <div class="p-4 bg-green-50 rounded-2xl text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
             </div>
         </div>
     </div>
 </div>
 
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <h2 class="text-lg font-bold text-gray-800">@Loc.Translate("Quick Actions")</h2>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <h3 class="text-lg font-bold text-gray-800 mb-6">@Loc.Translate("Financial Performance")</h3>
+        <canvas id="mainChart" height="150"></canvas>
     </div>
-    <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <a asp-controller="Journal" asp-action="Create" class="flex flex-col items-center justify-center p-6 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition group">
-            <svg class="w-8 h-8 text-blue-600 mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            <span class="font-medium text-gray-700">@Loc.Translate("New Journal Entry")</span>
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 flex flex-col items-center justify-center text-center">
+        <div class="mb-6 relative">
+            <div class="w-32 h-32 rounded-full border-8 border-blue-100 flex items-center justify-center">
+                <span class="text-2xl font-black text-blue-600">76%</span>
+            </div>
+        </div>
+        <h4 class="font-bold text-gray-900 mb-2">@Loc.Translate("Budget Utilization")</h4>
+        <p class="text-sm text-gray-500">@Loc.Translate("Budget Note")</p>
+        <button class="mt-6 bg-gray-50 hover:bg-gray-100 text-gray-900 font-bold py-2 px-6 rounded-xl transition">@Loc.Translate("View Budget")</button>
+    </div>
+</div>
+
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-8 py-6 border-b border-gray-100 bg-gray-50/50">
+        <h2 class="text-lg font-black text-gray-800 uppercase tracking-widest">@Loc.Translate("Quick Actions")</h2>
+    </div>
+    <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a asp-controller="Journal" asp-action="Create" class="group flex flex-col items-center justify-center p-8 bg-white border-2 border-gray-100 rounded-2xl hover:border-blue-500 hover:bg-blue-50/50 transition">
+            <div class="p-4 bg-blue-100 rounded-2xl text-blue-600 group-hover:scale-110 transition">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            </div>
+            <span class="mt-4 font-bold text-gray-700">@Loc.Translate("New Journal Entry")</span>
         </a>
-        <a asp-controller="Invoice" asp-action="Create" class="flex flex-col items-center justify-center p-6 bg-white border border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-300 transition group">
-            <svg class="w-8 h-8 text-green-600 mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            <span class="font-medium text-gray-700">@Loc.Translate("Create Invoice")</span>
+        <a asp-controller="Invoice" asp-action="Create" class="group flex flex-col items-center justify-center p-8 bg-white border-2 border-gray-100 rounded-2xl hover:border-green-500 hover:bg-green-50/50 transition">
+            <div class="p-4 bg-green-100 rounded-2xl text-green-600 group-hover:scale-110 transition">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <span class="mt-4 font-bold text-gray-700">@Loc.Translate("Create Invoice")</span>
         </a>
-        <a asp-controller="Report" asp-action="BalanceSheet" class="flex flex-col items-center justify-center p-6 bg-white border border-gray-200 rounded-lg hover:bg-purple-50 hover:border-purple-300 transition group">
-            <svg class="w-8 h-8 text-purple-600 mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-            <span class="font-medium text-gray-700">@Loc.Translate("Financial Reports")</span>
+        <a asp-controller="Report" asp-action="BalanceSheet" class="group flex flex-col items-center justify-center p-8 bg-white border-2 border-gray-100 rounded-2xl hover:border-purple-500 hover:bg-purple-50/50 transition">
+            <div class="p-4 bg-purple-100 rounded-2xl text-purple-600 group-hover:scale-110 transition">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            </div>
+            <span class="mt-4 font-bold text-gray-700">@Loc.Translate("Financial Reports")</span>
         </a>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: '@Html.Raw(Loc.Translate("Revenue"))',
+                    data: [12000, 19000, 15000, 25000, 22000, 30000],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: '@Html.Raw(Loc.Translate("Expenses"))',
+                    data: [8000, 12000, 11000, 15000, 14000, 18000],
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+}

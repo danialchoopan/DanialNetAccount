@@ -19,16 +19,24 @@ namespace DanialNetAccount.Controllers
             _inventoryService = inventoryService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, InvoiceType? type)
         {
-            var invoices = await _context.Invoices.OrderByDescending(i => i.Date).ToListAsync();
+            var query = _context.Invoices.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+                query = query.Where(i => i.InvoiceNumber.Contains(search) || i.CustomerName.Contains(search));
+
+            if (type.HasValue)
+                query = query.Where(i => i.Type == type.Value);
+
+            var invoices = await query.OrderByDescending(i => i.Date).ToListAsync();
             return View(invoices);
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(InvoiceType type = InvoiceType.Sale)
         {
             ViewBag.Products = await _context.Products.ToListAsync();
-            return View(new InvoiceViewModel());
+            return View(new InvoiceViewModel { Type = type });
         }
 
         [HttpPost]
@@ -46,7 +54,7 @@ namespace DanialNetAccount.Controllers
             {
                 ModelState.AddModelError("", "Invoice must have at least one item.");
             }
-            else
+            else if (model.Type == InvoiceType.Sale)
             {
                 foreach (var item in model.Items)
                 {
@@ -66,9 +74,10 @@ namespace DanialNetAccount.Controllers
                 {
                     var invoice = new Invoice
                     {
-                        InvoiceNumber = "INV-" + DateTime.Now.Ticks,
+                        InvoiceNumber = (model.Type == InvoiceType.Sale ? "SAL-" : "PUR-") + DateTime.Now.Ticks,
                         CustomerName = model.CustomerName,
                         Date = model.Date,
+                        Type = model.Type,
                         Items = model.Items!.Select(i => new InvoiceItem
                         {
                             ProductId = i.ProductId,
@@ -79,47 +88,68 @@ namespace DanialNetAccount.Controllers
                     };
 
                     invoice.TotalAmount = invoice.Items.Sum(i => i.TotalPrice);
-                    invoice.DiscountAmount = 0;
                     invoice.TaxAmount = invoice.TotalAmount * 0.09m;
-                    invoice.FinalAmount = invoice.TotalAmount + invoice.TaxAmount - invoice.DiscountAmount;
+                    invoice.FinalAmount = invoice.TotalAmount + invoice.TaxAmount;
 
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
 
-                    IInventoryValuationStrategy strategy = settings.ValuationMethod == InventoryValuationMethod.FIFO
-                        ? new FIFOValuationStrategy()
-                        : new AverageValuationStrategy();
-
-                    decimal totalCOGS = 0;
-                    foreach (var item in invoice.Items)
-                    {
-                        totalCOGS += await _inventoryService.SellProduct(item.ProductId, item.Quantity, strategy, invoice.Id);
-                    }
-
-                    // SYNCHRONIZED CODES WITH DBINITIALIZER
                     var bankAccount = await GetOrCreateAccount("Main Bank Account", "111", AccountType.Asset, "1");
                     var salesAccount = await GetOrCreateAccount("Sales Revenue", "411", AccountType.Revenue, "4");
                     var cogsAccount = await GetOrCreateAccount("Cost of Goods Sold", "511", AccountType.Expense, "5");
                     var inventoryAccount = await GetOrCreateAccount("Inventory", "121", AccountType.Asset, "1");
-                    var taxAccount = await GetOrCreateAccount("Sales Tax Payable", "221", AccountType.Liability, "2");
+                    var taxPayableAccount = await GetOrCreateAccount("Sales Tax Payable", "221", AccountType.Liability, "2");
+                    var apAccount = await GetOrCreateAccount("Accounts Payable", "211", AccountType.Liability, "2");
 
-                    var journalEntry = new JournalEntry
+                    if (model.Type == InvoiceType.Sale)
                     {
-                        Date = invoice.Date,
-                        Description = $"Invoice {invoice.InvoiceNumber} - {invoice.CustomerName}",
-                        Lines = new List<JournalEntryLine>
+                        IInventoryValuationStrategy strategy = settings.ValuationMethod == InventoryValuationMethod.FIFO
+                            ? new FIFOValuationStrategy()
+                            : new AverageValuationStrategy();
+
+                        decimal totalCOGS = 0;
+                        foreach (var item in invoice.Items)
                         {
-                            new JournalEntryLine { AccountId = bankAccount.Id, Debit = invoice.FinalAmount, Credit = 0 },
-                            new JournalEntryLine { AccountId = salesAccount.Id, Debit = 0, Credit = invoice.TotalAmount },
-                            new JournalEntryLine { AccountId = taxAccount.Id, Debit = 0, Credit = invoice.TaxAmount },
-                            new JournalEntryLine { AccountId = cogsAccount.Id, Debit = totalCOGS, Credit = 0 },
-                            new JournalEntryLine { AccountId = inventoryAccount.Id, Debit = 0, Credit = totalCOGS }
+                            totalCOGS += await _inventoryService.SellProduct(item.ProductId, item.Quantity, strategy, invoice.Id);
                         }
-                    };
 
-                    _context.JournalEntries.Add(journalEntry);
+                        var journalEntry = new JournalEntry
+                        {
+                            Date = invoice.Date,
+                            Description = $"Sale Invoice {invoice.InvoiceNumber} - {invoice.CustomerName}",
+                            Lines = new List<JournalEntryLine>
+                            {
+                                new JournalEntryLine { AccountId = bankAccount.Id, Debit = invoice.FinalAmount, Credit = 0 },
+                                new JournalEntryLine { AccountId = salesAccount.Id, Debit = 0, Credit = invoice.TotalAmount },
+                                new JournalEntryLine { AccountId = taxPayableAccount.Id, Debit = 0, Credit = invoice.TaxAmount },
+                                new JournalEntryLine { AccountId = cogsAccount.Id, Debit = totalCOGS, Credit = 0 },
+                                new JournalEntryLine { AccountId = inventoryAccount.Id, Debit = 0, Credit = totalCOGS }
+                            }
+                        };
+                        _context.JournalEntries.Add(journalEntry);
+                    }
+                    else // PURCHASE INVOICE
+                    {
+                        foreach (var item in invoice.Items)
+                        {
+                            await _inventoryService.PurchaseProduct(item.ProductId, item.Quantity, item.UnitPrice);
+                        }
+
+                        var journalEntry = new JournalEntry
+                        {
+                            Date = invoice.Date,
+                            Description = $"Purchase Invoice {invoice.InvoiceNumber} - {invoice.CustomerName}",
+                            Lines = new List<JournalEntryLine>
+                            {
+                                new JournalEntryLine { AccountId = inventoryAccount.Id, Debit = invoice.TotalAmount, Credit = 0 },
+                                new JournalEntryLine { AccountId = taxPayableAccount.Id, Debit = invoice.TaxAmount, Credit = 0 }, // Input VAT
+                                new JournalEntryLine { AccountId = bankAccount.Id, Debit = 0, Credit = invoice.FinalAmount }
+                            }
+                        };
+                        _context.JournalEntries.Add(journalEntry);
+                    }
+
                     await _context.SaveChangesAsync();
-
                     await transaction.CommitAsync();
                     return RedirectToAction(nameof(Details), new { id = invoice.Id });
                 }
@@ -168,28 +198,10 @@ namespace DanialNetAccount.Controllers
 
             if (invoice == null) return NotFound();
 
-            string html = $@"
-<html>
-<head><title>Invoice {invoice.InvoiceNumber}</title></head>
-<body>
-    <h1>Invoice {invoice.InvoiceNumber}</h1>
-    <p>Customer: {invoice.CustomerName}</p>
-    <p>Date: {invoice.Date.ToShortDateString()}</p>
-    <p>Status: {invoice.Status}</p>
-    <table border='1'>
-        <thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
-        <tbody>";
-            foreach(var item in invoice.Items) {
-                html += $"<tr><td>{item.Product?.Name}</td><td>{item.Quantity}</td><td>{item.UnitPrice}</td><td>{item.TotalPrice}</td></tr>";
-            }
-            html += $@"
-        </tbody>
-    </table>
-    <p>Subtotal: {invoice.TotalAmount}</p>
-    <p>Tax: {invoice.TaxAmount}</p>
-    <p>Final Total: {invoice.FinalAmount}</p>
-</body>
-</html>";
+            string html = $@"<html><body style='font-family:sans-serif;'><h1>{invoice.Type} Invoice {invoice.InvoiceNumber}</h1><p>Customer/Vendor: {invoice.CustomerName}</p><p>Date: {invoice.Date.ToShortDateString()}</p><h3>Items</h3><table border='1' width='100%'><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>";
+            foreach(var item in invoice.Items) html += $"<tr><td>{item.Product?.Name}</td><td>{item.Quantity}</td><td>{item.UnitPrice}</td><td>{item.TotalPrice}</td></tr>";
+            html += $"</table><p>Total: {invoice.FinalAmount}</p></body></html>";
+
             return File(System.Text.Encoding.UTF8.GetBytes(html), "text/html", $"Invoice_{invoice.InvoiceNumber}.html");
         }
 
@@ -214,7 +226,25 @@ namespace DanialNetAccount.Controllers
             {
                 invoice.Status = InvoiceStatus.Voided;
 
-                await _inventoryService.RestoreProduct(invoice.Id);
+                if (invoice.Type == InvoiceType.Sale)
+                {
+                    await _inventoryService.RestoreProduct(invoice.Id);
+                }
+                else // PURCHASE VOID
+                {
+                    // For simplicity, we just reduce inventory by same quantity.
+                    // Production systems would check if stock is still available.
+                    foreach(var item in invoice.Items)
+                    {
+                        // Deduct from latest batches
+                        var purchases = await _context.InventoryTransactions
+                            .Where(t => t.ProductId == item.ProductId && t.Type == TransactionType.Purchase && t.RemainingQuantity >= item.Quantity)
+                            .OrderByDescending(t => t.Date)
+                            .ToListAsync();
+
+                        if (purchases.Any()) purchases[0].RemainingQuantity -= item.Quantity;
+                    }
+                }
 
                 var originalJournal = await _context.JournalEntries
                     .Include(j => j.Lines)

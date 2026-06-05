@@ -1,14 +1,16 @@
+@using DanialNetAccount.Services
+@inject LocalizationService Loc
 @model DanialNetAccount.ViewModels.TrialBalanceReport
 
 @{
-    ViewData["Title"] = "Trial Balance";
+    ViewData["Title"] = Loc.Translate("Trial Balance");
 }
 
 <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Trial Balance</h1>
+    <h1 class="text-3xl font-bold text-gray-900">@Loc.Translate("Trial Balance")</h1>
     <a asp-controller="Report" asp-action="ClearCache" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg transition flex items-center">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-        Refresh Data
+        @Loc.Translate("Recalculate")
     </a>
 </div>
 
@@ -16,10 +18,10 @@
     <table class="w-full text-left border-collapse">
         <thead>
             <tr class="bg-gray-900 text-white">
-                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider">Code</th>
-                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider">Account Name</th>
-                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-right">Debit</th>
-                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-right">Credit</th>
+                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider">@Loc.Translate("Number")</th>
+                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider">@Loc.Translate("Account")</th>
+                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-right">@Loc.Translate("Debit")</th>
+                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-right">@Loc.Translate("Credit")</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -28,16 +30,16 @@
                 <tr class="hover:bg-gray-50 transition">
                     <td class="px-6 py-4 font-mono text-gray-600 text-sm">@line.AccountCode</td>
                     <td class="px-6 py-4 font-medium text-gray-900">@line.AccountName</td>
-                    <td class="px-6 py-4 text-right font-mono text-green-600 font-bold">@line.Debit.ToString("N2")</td>
-                    <td class="px-6 py-4 text-right font-mono text-red-600 font-bold">@line.Credit.ToString("N2")</td>
+                    <td class="px-6 py-4 text-right font-mono text-green-600 font-bold">@Loc.FormatCurrency(line.Debit)</td>
+                    <td class="px-6 py-4 text-right font-mono text-red-600 font-bold">@Loc.FormatCurrency(line.Credit)</td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr class="bg-gray-100 border-t-2 border-gray-200">
-                <th colspan="2" class="px-6 py-6 text-lg font-bold text-gray-900">Total</th>
-                <th class="px-6 py-6 text-right text-xl font-black text-gray-900 font-mono">@Model.TotalDebit.ToString("N2")</th>
-                <th class="px-6 py-6 text-right text-xl font-black text-gray-900 font-mono">@Model.TotalCredit.ToString("N2")</th>
+                <th colspan="2" class="px-6 py-6 text-lg font-bold text-gray-900">@Loc.Translate("Total")</th>
+                <th class="px-6 py-6 text-right text-xl font-black text-gray-900 font-mono">@Loc.FormatCurrency(Model.TotalDebit)</th>
+                <th class="px-6 py-6 text-right text-xl font-black text-gray-900 font-mono">@Loc.FormatCurrency(Model.TotalCredit)</th>
             </tr>
         </tfoot>
     </table>

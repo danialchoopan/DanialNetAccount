@@ -21,49 +21,43 @@ A sophisticated engine to track stock levels and calculate costs.
 - **Strategy Pattern**: Choose between **FIFO** (First-In-First-Out) or **Weighted Average** costing methods.
 - **Negative Stock Protection**: The system prevents sales if inventory is insufficient, maintaining logic integrity.
 
-### 4. 🧾 Dynamic Invoicing & Sales Integration
-Streamlined sales workflow integrated with the ledger and inventory.
-- **Real-time Tax & Totals**: Automatically calculates VAT (9%) and totals as you add items.
-- **Automatic Posting**: Saving an invoice automatically reduces stock, records COGS, and updates the General Ledger.
-- **Voiding Logic**: Properly reverse invoices with a single click, restoring stock and creating reversing journal entries.
+### 4. 🧾 Dynamic Invoicing & Integrated Sales/Purchases
+Streamlined workflow for both Sales and Purchase invoices.
+- **Purchase Invoices**: Seamlessly increase inventory and update Accounts Payable/Bank.
+- **Real-time Tax & Totals**: Automatically calculates VAT (9%) and totals.
+- **Automatic Posting**: Saving an invoice automatically records COGS and updates the General Ledger.
 
 ### 5. 📊 Financial Intelligence Dashboard
 Get instant insights into your company's health.
+- **Visual Analytics**: Interactive charts showing revenue and expense trends.
 - **Real-time Reports**: Generate **Trial Balance**, **Profit & Loss**, and **Balance Sheet** statements.
-- **IMemoryCache**: High-performance reporting using intelligent caching.
-- **Account Ledger**: Drill down into any account to see a chronological list of transactions and a running balance.
+- **Account Ledger**: Drill down into any account to see chronological transaction history.
 
 ---
 
 ## 🛠 Technical Implementation
 
 ### Architecture
-- **MVC Pattern**: Clear separation of concerns between Models, Views, and Controllers.
-- **Service Layer**: Business logic (Inventory, Reports, Localization) is encapsulated in dedicated service classes.
-- **Tailwind CSS & Vazirmatn**: A modern, responsive UI built with a premium Iranian font face.
-- **Multi-Language & Currency**: Full support for English/Persian (RTL) and USD/Toman.
+- **MVC Pattern**: Clear separation between Models, Views, and Controllers.
+- **Service Layer**: Business logic (Inventory, Reports, Localization) in dedicated services.
+- **Tailwind CSS & Vazirmatn**: Modern, responsive UI with premium Iranian typography.
+- **Multi-Language & Currency**: Dynamic RTL/LTR support for English/Persian and USD/Toman.
 
 ### Folder Structure
-- `Controllers/`: Handles user requests and orchestrates business flow.
-- `Data/`: Contains `ApplicationDbContext` and `DbInitializer` for seeding.
-- `Models/`: Core domain entities (Accounts, JournalEntries, Products, Invoices).
-- `Services/`: Business logic services (Strategy Pattern for Inventory, Reporting logic, Localization).
-- `ViewModels/`: Data transfer objects optimized for the Views.
-- `Views/`: Razor-based UI templates styled with Tailwind CSS.
+- `Controllers/`: User request orchestration.
+- `Data/`: DB Context and complex seeding logic.
+- `Models/`: Core domain entities.
+- `Services/`: Strategy patterns and specialized logic.
+- `Views/`: Tailwind-styled Razor templates.
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- .NET 8.0 SDK
-- Docker (Optional)
-
 ### Run Locally
 1. Clone the repository.
 2. Run `dotnet run`.
-3. Open `http://localhost:5000` (or the port specified in console).
-4. The database will automatically be created and seeded with sample data.
+3. Open `http://localhost:5000`.
 
 ### Run with Docker
 ```bash
@@ -72,21 +66,17 @@ docker-compose up --build
 
 ---
 
-## 📸 System Previews
+## 📸 System Previews (English)
 
-| Dashboard | Chart of Accounts |
-|-----------|-------------------|
-| ![Dashboard](docs/screenshots/1_dashboard.png) | ![Accounts](docs/screenshots/2_accounts.png) |
-
-| Invoices | Profit & Loss |
-|----------|---------------|
-| ![Invoices](docs/screenshots/3_invoices.png) | ![P&L](docs/screenshots/4_profit_loss.png) |
+| Dashboard | Chart of Accounts | Invoices |
+|-----------|-------------------|----------|
+| ![Dashboard](docs/screenshots/en/dashboard.png) | ![Accounts](docs/screenshots/en/accounts.png) | ![Invoices](docs/screenshots/en/invoices.png) |
 
 ---
 
 # دانیال‌نت اَکانت 🚀 (نسخه فارسی)
 
-**دانیال‌نت اَکانت** یک سیستم حسابداری و مدیریت مالی در سطح اینترپرایز برای شرکت‌های کوچک و متوسط (SMEs) است. این نرم‌افزار با استفاده از تکنولوژی‌های روز مانند **ASP.NET Core 8.0 MVC**، **Entity Framework Core** و **Tailwind CSS** طراحی شده و راهکاری جامع برای حسابداری دوطرفه، مدیریت انبار و گزارش‌گیری مالی ارائه می‌دهد.
+**دانیال‌نت اَکانت** یک سیستم حسابداری و مدیریت مالی در سطح اینترپرایز برای شرکت‌های کوچک و متوسط (SMEs) است. این نرم‌افزار با استفاده از تکنولوژی‌های روز طراحی شده و راهکاری جامع برای حسابداری دوطرفه، مدیریت انبار و گزارش‌گیری مالی ارائه می‌دهد.
 
 ---
 
@@ -95,58 +85,28 @@ docker-compose up --build
 ### ۱. 📖 سیستم دفترداری دوطرفه
 قلب تپنده سیستم، دفتر کل مبتنی بر حسابداری دوطرفه است. تمام تراکنش‌ها اعتبارسنجی می‌شوند تا همیشه **جمع بدهکار = جمع بستانکار** باشد.
 - **ثبت سند داینامیک**: افزودن بی‌شمار ردیف به سند با محاسبه لحظه‌ای تراز توسط جاوااسکریپت.
-- **رعایت اصول ACID**: استفاده از تراکنش‌های دیتابیس برای تضمین یکپارچگی داده‌های مالی.
 
 ### ۲. 🌳 ساختار درختی حساب‌ها (کدینگ)
-مدیریت حساب‌ها در سطوح مختلف (گروه، کل، معین، تفصیلی).
-- **مدل خوداراجعی**: قابلیت تعریف روابط والد-فرزندی برای حساب‌ها.
-- **نمای درختی تعاملی**: رابط کاربری تمیز و قابلیت باز و بسته شدن گره‌های حساب.
+مدیریت حساب‌ها در سطوح مختلف با قابلیت تعریف روابط والد-فرزندی و نمای درختی تعاملی.
 
 ### ۳. 📦 موتور پیشرفته انبارداری
-سیستم هوشمند برای ردیابی موجودی و محاسبه بهای تمام شده.
-- **الگوی استراتژی**: انتخاب بین روش‌های **FIFO** (اولین صادره از اولین وارده) یا **میانگین موزون**.
-- **جلوگیری از موجودی منفی**: سیستم اجازه فروش کالایی که موجودی ندارد را نمی‌دهد.
+ردیابی هوشمند موجودی با استفاده از الگوهای **FIFO** و **میانگین موزون**. همراه با سیستم جلوگیری از موجودی منفی.
 
-### ۴. 🧾 صدور فاکتور و یکپارچگی فروش
-فرآیند فروش متصل به دفتر کل و انبار.
-- **محاسبه لحظه‌ای مالیات**: محاسبه خودکار مالیات بر ارزش افزوده (۹٪) و جمع فاکتور.
-- **ثبت خودکار اسناد**: با ذخیره فاکتور، موجودی انبار کسر، بهای تمام شده محاسبه و سند حسابداری مربوطه صادر می‌شود.
-- **قابلیت ابطال (Void)**: ابطال فاکتور با یک کلیک، بازگرداندن کالا به انبار و صدور سند معکوس.
+### ۴. 🧾 صدور فاکتور و یکپارچگی خرید/فروش
+فرآیند فروش و خرید متصل به دفتر کل و انبار.
+- **فاکتور خرید**: افزایش خودکار موجودی و ثبت سند بدهی/بانک.
+- **ثبت خودکار اسناد**: محاسبه لحظه‌ای بهای تمام شده و مالیات (۹٪).
 
 ### ۵. 📊 داشبورد هوش مالی
-دسترسی لحظه‌ای به وضعیت سلامت شرکت.
-- **گزارشات واقعی**: تراز آزمایشی، سود و زیان، و ترازنامه.
-- **استفاده از کش (IMemoryCache)**: سرعت بسیار بالا در لود گزارشات سنگین.
-- **دفتر معین حساب**: مشاهده گردش عملیات و مانده جاری برای هر حساب به صورت مجزا.
+نمایش نمودارهای تحلیلی و گزارشات واقعی (تراز آزمایشی، سود و زیان، ترازنامه) با سرعت بالا.
 
 ---
 
-## 🛠 پیاده‌سازی فنی
+## 📸 پیش‌نمایش سیستم (فارسی)
 
-### معماری
-- **الگوی MVC**: جداسازی دقیق لایه‌های داده، نمایش و کنترلر.
-- **لایه سرویس**: کپسوله‌سازی منطق بیزینسی (انبار، گزارشات، بومی‌سازی).
-- **Tailwind CSS و فونت وزیر**: رابط کاربری مدرن، ریسپانسیو و بهینه شده برای زبان فارسی (RTL).
-- **پشتیبانی از چند زبانی و ارز**: پشتیبانی کامل از انگلیسی/فارسی و دلار/تومان.
-
----
-
-## 🚀 راه اندازی سریع
-
-### پیش‌نیازها
-- .NET 8.0 SDK
-- Docker (اختیاری)
-
-### اجرای محلی
-1. پروژه را کلون کنید.
-2. دستور `dotnet run` را اجرا کنید.
-3. آدرس `http://localhost:5000` را باز کنید.
-4. دیتابیس به صورت خودکار ساخته و با داده‌های اولیه نمونه پر می‌شود.
-
-### اجرا با داکر
-```bash
-docker-compose up --build
-```
+| داشبورد مدیریتی | ساختار حساب‌ها | مدیریت فاکتورها |
+|-----------|-------------------|----------|
+| ![Dashboard](docs/screenshots/fa/dashboard.png) | ![Accounts](docs/screenshots/fa/accounts.png) | ![Invoices](docs/screenshots/fa/invoices.png) |
 
 ---
 توسعه یافته با ❤️ توسط تیم دانیال‌نت.
