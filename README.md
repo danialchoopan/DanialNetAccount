@@ -109,4 +109,4 @@ docker-compose up --build
 | ![Dashboard](docs/screenshots/fa/dashboard.png) | ![Accounts](docs/screenshots/fa/accounts.png) | ![Invoices](docs/screenshots/fa/invoices.png) |
 
 ---
-توسعه یافته با ❤️ توسط تیم دانیال‌نت.
+توسعه یافته با ❤️
