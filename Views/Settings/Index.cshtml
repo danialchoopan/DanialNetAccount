@@ -1,0 +1,25 @@
+@model DanialNetAccount.Models.GlobalSetting
+@using DanialNetAccount.Models.Enums
+
+@{
+    ViewData["Title"] = "System Settings";
+}
+
+<h1>System Settings</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Update">
+            <div class="form-group mb-3">
+                <label asp-for="ValuationMethod" class="control-label">Inventory Valuation Method</label>
+                <select asp-for="ValuationMethod" class="form-control" asp-items="Html.GetEnumSelectList<InventoryValuationMethod>()"></select>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ClosedUntilDate" class="control-label">Lock Transactions Until Date</label>
+                <input asp-for="ClosedUntilDate" class="form-control" type="date" />
+                <small class="form-text text-muted">No transactions can be posted on or before this date.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+        </form>
+    </div>
+</div>

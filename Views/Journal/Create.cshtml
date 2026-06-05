@@ -1,0 +1,143 @@
+@model DanialNetAccount.ViewModels.JournalEntryViewModel
+
+@{
+    ViewData["Title"] = "Create Journal Entry";
+    var accounts = ViewBag.Accounts as List<DanialNetAccount.Models.Account>;
+}
+
+<h1>Create Journal Entry</h1>
+
+<form asp-action="Create" id="journalForm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group mb-3">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" type="date" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <h3>Lines</h3>
+    <table class="table" id="linesTable">
+        <thead>
+            <tr>
+                <th>Account</th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Lines.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <select name="Lines[@i].AccountId" class="form-control">
+                            @foreach (var acc in accounts!)
+                            {
+                                <option value="@acc.Id">@acc.Name (@acc.Code)</option>
+                            }
+                        </select>
+                    </td>
+                    <td><input name="Lines[@i].Debit" class="form-control debit-input" value="@Model.Lines[i].Debit" type="number" step="0.01" /></td>
+                    <td><input name="Lines[@i].Credit" class="form-control credit-input" value="@Model.Lines[i].Credit" type="number" step="0.01" /></td>
+                    <td><button type="button" class="btn btn-danger remove-line">Remove</button></td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td id="totalDebit">0.00</td>
+                <td id="totalCredit">0.00</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <button type="button" id="addLine" class="btn btn-secondary mb-3">Add Line</button>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-success" />
+        <a asp-action="Index" class="btn btn-link">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let accounts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(accounts?.Select(a => new { a.Id, a.Name, a.Code })));
+
+            function updateTotals() {
+                let totalDebit = 0;
+                let totalCredit = 0;
+                $('.debit-input').each(function () {
+                    totalDebit += parseFloat($(this).val()) || 0;
+                });
+                $('.credit-input').each(function () {
+                    totalCredit += parseFloat($(this).val()) || 0;
+                });
+                $('#totalDebit').text(totalDebit.toFixed(2));
+                $('#totalCredit').text(totalCredit.toFixed(2));
+
+                if (totalDebit !== totalCredit || totalDebit === 0) {
+                    $('#totalDebit, #totalCredit').addClass('text-danger').removeClass('text-success');
+                } else {
+                    $('#totalDebit, #totalCredit').addClass('text-success').removeClass('text-danger');
+                }
+            }
+
+            $('#addLine').click(function () {
+                let index = $('#linesTable tbody tr').length;
+                let options = accounts.map(a => `<option value="${a.Id}">${a.Name} (${a.Code})</option>`).join('');
+                let row = `
+                    <tr>
+                        <td>
+                            <select name="Lines[${index}].AccountId" class="form-control">
+                                ${options}
+                            </select>
+                        </td>
+                        <td><input name="Lines[${index}].Debit" class="form-control debit-input" value="0" type="number" step="0.01" /></td>
+                        <td><input name="Lines[${index}].Credit" class="form-control credit-input" value="0" type="number" step="0.01" /></td>
+                        <td><button type="button" class="btn btn-danger remove-line">Remove</button></td>
+                    </tr>`;
+                $('#linesTable tbody').append(row);
+                updateTotals();
+            });
+
+            $(document).on('click', '.remove-line', function () {
+                $(this).closest('tr').remove();
+                reindexLines();
+                updateTotals();
+            });
+
+            $(document).on('input', '.debit-input, .credit-input', function () {
+                updateTotals();
+            });
+
+            function reindexLines() {
+                $('#linesTable tbody tr').each(function (index) {
+                    $(this).find('select').attr('name', `Lines[${index}].AccountId`);
+                    $(this).find('.debit-input').attr('name', `Lines[${index}].Debit`);
+                    $(this).find('.credit-input').attr('name', `Lines[${index}].Credit`);
+                });
+            }
+
+            // Initial call
+            if($('#linesTable tbody tr').length === 0) {
+                $('#addLine').click();
+                $('#addLine').click();
+            }
+            updateTotals();
+        });
+    </script>
+}

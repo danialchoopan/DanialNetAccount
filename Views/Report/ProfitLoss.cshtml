@@ -1,0 +1,56 @@
+@model DanialNetAccount.ViewModels.ProfitLossReport
+
+@{
+    ViewData["Title"] = "Profit & Loss";
+}
+
+<h1>Profit & Loss Report</h1>
+
+<div class="mb-3">
+    <a asp-controller="Report" asp-action="ClearCache" class="btn btn-warning">Refresh Data</a>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h3>Revenue</h3>
+        <table class="table">
+            @foreach (var line in Model.RevenueLines)
+            {
+                <tr>
+                    <td>@line.AccountName</td>
+                    <td class="text-end">@line.Amount.ToString("N2")</td>
+                </tr>
+            }
+            <tr class="table-info">
+                <th>Total Revenue</th>
+                <th class="text-end">@Model.TotalRevenue.ToString("N2")</th>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h3>Expenses</h3>
+        <table class="table">
+            @foreach (var line in Model.ExpenseLines)
+            {
+                <tr>
+                    <td>@line.AccountName</td>
+                    <td class="text-end">@line.Amount.ToString("N2")</td>
+                </tr>
+            }
+            <tr class="table-danger">
+                <th>Total Expenses</th>
+                <th class="text-end">@Model.TotalExpenses.ToString("N2")</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h2>Net Profit: <span class="@(Model.NetProfit >= 0 ? "text-success" : "text-danger")">@Model.NetProfit.ToString("N2")</span></h2>
+            </div>
+        </div>
+    </div>
+</div>
