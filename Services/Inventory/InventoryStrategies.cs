@@ -31,7 +31,6 @@ namespace DanialNetAccount.Services.Inventory
 
             if (remainingToSell > 0)
             {
-                // This shouldn't happen if inventory is checked before selling
                 throw new InvalidOperationException("Not enough inventory to fulfill the sale.");
             }
 
@@ -50,13 +49,14 @@ namespace DanialNetAccount.Services.Inventory
             if (totalQuantity < quantityToSell)
                 throw new InvalidOperationException("Not enough inventory.");
 
+            if (totalQuantity == 0) return 0; // Safeguard
+
             decimal totalValue = transactions
                 .Where(t => t.Type == Models.Enums.TransactionType.Purchase)
                 .Sum(t => t.RemainingQuantity * t.UnitPrice);
 
             decimal averageCost = totalValue / totalQuantity;
 
-            // For simplicity in this demo, we just update remaining quantities
             int remainingToSell = quantityToSell;
             var purchases = transactions
                 .Where(t => t.Type == Models.Enums.TransactionType.Purchase && t.RemainingQuantity > 0)

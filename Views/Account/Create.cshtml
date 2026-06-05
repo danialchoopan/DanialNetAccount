@@ -5,41 +5,54 @@
     ViewData["Title"] = "Create Account";
 }
 
-<h1>Create Account</h1>
+<div class="max-w-xl mx-auto">
+    <div class="flex items-center space-x-4 mb-8">
+        <div class="p-3 bg-blue-600 rounded-2xl text-white">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">Define New Account</h1>
+    </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <form asp-action="Create" class="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
+        <div class="p-8 space-y-6">
+            <div asp-validation-summary="ModelOnly" class="bg-red-50 text-red-700 p-4 rounded-xl text-sm"></div>
+
+            <div>
+                <label asp-for="Name" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2"></label>
+                <input asp-for="Name" class="block w-full border-gray-200 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition" placeholder="e.g. Petty Cash" />
+                <span asp-validation-for="Name" class="text-red-500 text-xs mt-1"></span>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label asp-for="Code" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2"></label>
+                    <input asp-for="Code" class="block w-full border-gray-200 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition font-mono" placeholder="1112" />
+                    <span asp-validation-for="Code" class="text-red-500 text-xs mt-1"></span>
+                </div>
+                <div>
+                    <label asp-for="Type" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2"></label>
+                    <select asp-for="Type" class="block w-full border-gray-200 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition" asp-items="Html.GetEnumSelectList<AccountType>()"></select>
+                    <span asp-validation-for="Type" class="text-red-500 text-xs mt-1"></span>
+                </div>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Type" class="control-label"></label>
-                <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<AccountType>()"></select>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="ParentAccountId" class="control-label">Parent Account</label>
-                <select asp-for="ParentAccountId" class="form-control">
-                    <option value="">None</option>
+
+            <div>
+                <label asp-for="ParentAccountId" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Parent Hierarchy</label>
+                <select asp-for="ParentAccountId" class="block w-full border-gray-200 rounded-xl py-3 px-4 bg-gray-50 border focus:ring-2 focus:ring-blue-500 transition">
+                    <option value="">(Top Level Root)</option>
                     @foreach (var acc in (ViewBag.Accounts as List<DanialNetAccount.Models.Account>)!)
                     {
                         <option value="@acc.Id">@acc.Code - @acc.Name</option>
                     }
                 </select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-link">Back to List</a>
-            </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="bg-gray-50 px-8 py-6 flex justify-between items-center border-t border-gray-100">
+            <a asp-action="Index" class="text-gray-500 hover:text-gray-700 font-bold transition">Cancel</a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-xl shadow-lg transition transform active:scale-95">
+                Register Account
+            </button>
+        </div>
+    </form>
 </div>

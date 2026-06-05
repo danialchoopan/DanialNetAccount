@@ -1,38 +1,48 @@
 @model IEnumerable<DanialNetAccount.Models.JournalEntry>
 
 @{
-    ViewData["Title"] = "Journal Entries";
+    ViewData["Title"] = "Journal";
 }
 
-<h1>Journal Entries</h1>
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">General Journal</h1>
+    <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        New Entry
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Entry</a>
-</p>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Lines (Account: Debit / Credit)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var entry in Model)
-        {
-            <tr>
-                <td>@entry.Date.ToShortDateString()</td>
-                <td>@entry.Description</td>
-                <td>
-                    <ul class="list-unstyled">
-                        @foreach (var line in entry.Lines)
-                        {
-                            <li>@line.Account?.Name: @line.Debit.ToString("N2") / @line.Credit.ToString("N2")</li>
-                        }
-                    </ul>
-                </td>
+<div class="bg-white shadow-sm border border-gray-100 rounded-xl overflow-hidden">
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-gray-50 border-b border-gray-100">
+                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Description</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-right">Debit</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-right">Credit</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            @foreach (var entry in Model)
+            {
+                <tr class="bg-blue-50/20">
+                    <td class="px-6 py-4 font-medium text-gray-900">@entry.Date.ToShortDateString()</td>
+                    <td class="px-6 py-4 font-bold text-gray-800" colspan="3">@entry.Description</td>
+                </tr>
+                @foreach (var line in entry.Lines)
+                {
+                    <tr>
+                        <td></td>
+                        <td class="px-6 py-3 text-gray-600 @(line.Credit > 0 ? "pl-12" : "")">@line.Account?.Name</td>
+                        <td class="px-6 py-3 text-right font-mono @(line.Debit > 0 ? "text-green-600" : "text-gray-300")">
+                            @(line.Debit > 0 ? line.Debit.ToString("N2") : "-")
+                        </td>
+                        <td class="px-6 py-3 text-right font-mono @(line.Credit > 0 ? "text-red-600" : "text-gray-300")">
+                            @(line.Credit > 0 ? line.Credit.ToString("N2") : "-")
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

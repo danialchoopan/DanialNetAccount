@@ -3,11 +3,35 @@ using DanialNetAccount.Models.Enums;
 
 namespace DanialNetAccount.Models
 {
+    public enum StoreType
+    {
+        Retail,
+        Wholesale,
+        ServiceBased,
+        Manufacturing
+    }
+
+    public enum AppLanguage
+    {
+        English,
+        Persian
+    }
+
+    public enum CurrencyType
+    {
+        USD,
+        Toman
+    }
+
     public class GlobalSetting
     {
         public int Id { get; set; }
         public InventoryValuationMethod ValuationMethod { get; set; } = InventoryValuationMethod.FIFO;
         public DateTime? ClosedUntilDate { get; set; }
+        public StoreType StoreType { get; set; } = StoreType.Retail;
+        public string CompanyName { get; set; } = "DanialNet Account";
+        public AppLanguage Language { get; set; } = AppLanguage.English;
+        public CurrencyType Currency { get; set; } = CurrencyType.USD;
     }
 
     public class Account
@@ -65,6 +89,7 @@ namespace DanialNetAccount.Models
         public string Name { get; set; } = string.Empty;
 
         public decimal Price { get; set; }
+        public string Category { get; set; } = "General";
     }
 
     public class InventoryTransaction
@@ -79,10 +104,7 @@ namespace DanialNetAccount.Models
         public DateTime Date { get; set; }
         public TransactionType Type { get; set; }
 
-        // Remaining quantity for FIFO
         public int RemainingQuantity { get; set; }
-
-        // Link to Invoice for easier reversal
         public int? InvoiceId { get; set; }
     }
 

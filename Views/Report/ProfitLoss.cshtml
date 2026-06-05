@@ -4,52 +4,92 @@
     ViewData["Title"] = "Profit & Loss";
 }
 
-<h1>Profit & Loss Report</h1>
-
-<div class="mb-3">
-    <a asp-controller="Report" asp-action="ClearCache" class="btn btn-warning">Refresh Data</a>
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Profit & Loss Statement</h1>
+    <a asp-action="ClearCache" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg transition flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        Recalculate
+    </a>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-6">
-        <h3>Revenue</h3>
-        <table class="table">
-            @foreach (var line in Model.RevenueLines)
-            {
-                <tr>
-                    <td>@line.AccountName</td>
-                    <td class="text-end">@line.Amount.ToString("N2")</td>
-                </tr>
-            }
-            <tr class="table-info">
-                <th>Total Revenue</th>
-                <th class="text-end">@Model.TotalRevenue.ToString("N2")</th>
-            </tr>
-        </table>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-8 py-6 bg-blue-50 border-b border-blue-100 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-blue-800 uppercase tracking-widest">Revenue</h2>
+                <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                </div>
+            </div>
+            <div class="p-8">
+                <table class="w-full">
+                    <tbody class="divide-y divide-gray-50">
+                        @foreach (var line in Model.RevenueLines)
+                        {
+                            <tr>
+                                <td class="py-4 text-gray-700 font-medium">@line.AccountName</td>
+                                <td class="py-4 text-right font-mono font-bold text-gray-900">@line.Amount.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="border-t-2 border-blue-100">
+                            <td class="py-6 text-lg font-bold text-gray-900">Total Revenue</td>
+                            <td class="py-6 text-right text-xl font-black text-blue-600 font-mono">@Model.TotalRevenue.ToString("N2")</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6">
-        <h3>Expenses</h3>
-        <table class="table">
-            @foreach (var line in Model.ExpenseLines)
-            {
-                <tr>
-                    <td>@line.AccountName</td>
-                    <td class="text-end">@line.Amount.ToString("N2")</td>
-                </tr>
-            }
-            <tr class="table-danger">
-                <th>Total Expenses</th>
-                <th class="text-end">@Model.TotalExpenses.ToString("N2")</th>
-            </tr>
-        </table>
+
+    <div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-8 py-6 bg-red-50 border-b border-red-100 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-red-800 uppercase tracking-widest">Expenses</h2>
+                <div class="p-2 bg-red-100 rounded-lg text-red-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                </div>
+            </div>
+            <div class="p-8">
+                <table class="w-full">
+                    <tbody class="divide-y divide-gray-50">
+                        @foreach (var line in Model.ExpenseLines)
+                        {
+                            <tr>
+                                <td class="py-4 text-gray-700 font-medium">@line.AccountName</td>
+                                <td class="py-4 text-right font-mono font-bold text-gray-900">@line.Amount.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="border-t-2 border-red-100">
+                            <td class="py-6 text-lg font-bold text-gray-900">Total Expenses</td>
+                            <td class="py-6 text-right text-xl font-black text-red-600 font-mono">@Model.TotalExpenses.ToString("N2")</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-12 text-center">
-        <div class="card bg-light">
-            <div class="card-body">
-                <h2>Net Profit: <span class="@(Model.NetProfit >= 0 ? "text-success" : "text-danger")">@Model.NetProfit.ToString("N2")</span></h2>
+<div class="mt-12">
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-1 shadow-xl">
+        <div class="bg-white rounded-[1.4rem] p-12 text-center">
+            <h2 class="text-sm font-bold text-gray-400 uppercase tracking-[0.25em] mb-4">Bottom Line</h2>
+            <p class="text-gray-500 mb-2">Net profit for current period</p>
+            <div class="text-6xl font-black font-mono @(Model.NetProfit >= 0 ? "text-green-600" : "text-red-600")">
+                @Model.NetProfit.ToString("N2")
+            </div>
+            <div class="mt-6 inline-flex items-center px-4 py-2 rounded-full @(Model.NetProfit >= 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700") font-bold text-sm">
+                @if(Model.NetProfit >= 0) {
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span>Profit Achieved</span>
+                } else {
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    <span>Loss Incurred</span>
+                }
             </div>
         </div>
     </div>

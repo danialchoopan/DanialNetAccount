@@ -35,6 +35,10 @@ namespace DanialNetAccount.Controllers
             {
                 settings.ValuationMethod = model.ValuationMethod;
                 settings.ClosedUntilDate = model.ClosedUntilDate;
+                settings.CompanyName = model.CompanyName;
+                settings.StoreType = model.StoreType;
+                settings.Language = model.Language;
+                settings.Currency = model.Currency;
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
