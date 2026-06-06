@@ -1,3 +1,39 @@
+
+
+# دانیال‌نت اَکانت 🚀
+
+**دانیال‌نت اَکانت** یک سیستم حسابداری و مدیریت مالی در سطح اینترپرایز برای شرکت‌های کوچک و متوسط (SMEs) است. این نرم‌افزار با استفاده از تکنولوژی‌های روز طراحی شده و راهکاری جامع برای حسابداری دوطرفه، مدیریت انبار و گزارش‌گیری مالی ارائه می‌دهد.
+
+---
+
+## ✨ ویژگی‌های کلیدی
+
+### ۱. 📖 سیستم دفترداری دوطرفه
+قلب تپنده سیستم، دفتر کل مبتنی بر حسابداری دوطرفه است. تمام تراکنش‌ها اعتبارسنجی می‌شوند تا همیشه **جمع بدهکار = جمع بستانکار** باشد.
+- **ثبت سند داینامیک**: افزودن بی‌شمار ردیف به سند با محاسبه لحظه‌ای تراز توسط جاوااسکریپت.
+
+### ۲. 🌳 ساختار درختی حساب‌ها (کدینگ)
+مدیریت حساب‌ها در سطوح مختلف با قابلیت تعریف روابط والد-فرزندی و نمای درختی تعاملی.
+
+### ۳. 📦 موتور پیشرفته انبارداری
+ردیابی هوشمند موجودی با استفاده از الگوهای **FIFO** و **میانگین موزون**. همراه با سیستم جلوگیری از موجودی منفی.
+
+### ۴. 🧾 صدور فاکتور و یکپارچگی خرید/فروش
+فرآیند فروش و خرید متصل به دفتر کل و انبار.
+- **فاکتور خرید**: افزایش خودکار موجودی و ثبت سند بدهی/بانک.
+- **ثبت خودکار اسناد**: محاسبه لحظه‌ای بهای تمام شده و مالیات (۹٪).
+
+### ۵. 📊 داشبورد هوش مالی
+نمایش نمودارهای تحلیلی و گزارشات واقعی (تراز آزمایشی، سود و زیان، ترازنامه) با سرعت بالا.
+---
+
+## 📸 پیش‌نمایش سیستم 
+
+| داشبورد مدیریتی | ساختار حساب‌ها | مدیریت فاکتورها |
+|-----------|-------------------|----------|
+| ![Dashboard](docs/screenshots/fa/dashboard.png) | ![Accounts](docs/screenshots/fa/accounts.png) | ![Invoices](docs/screenshots/fa/invoices.png) |
+
+---
 # DanialNet Account 🚀
 
 **DanialNet Account** is a high-performance, enterprise-grade accounting and financial management system designed for Small and Medium Enterprises (SMEs). Built with **ASP.NET Core 8.0 MVC**, **Entity Framework Core**, and **Tailwind CSS**, it offers a robust solution for double-entry bookkeeping, inventory management, and financial reporting.
@@ -35,6 +71,16 @@ Get instant insights into your company's health.
 
 ---
 
+## 📸 System Previews
+
+| Dashboard | Chart of Accounts | Invoices |
+|-----------|-------------------|----------|
+| ![Dashboard](docs/screenshots/en/dashboard.png) | ![Accounts](docs/screenshots/en/accounts.png) | ![Invoices](docs/screenshots/en/invoices.png) |
+
+---
+
+
+
 ## 🛠 Technical Implementation
 
 ### Architecture
@@ -42,7 +88,7 @@ Get instant insights into your company's health.
 - **Service Layer**: Business logic (Inventory, Reports, Localization) in dedicated services.
 - **Tailwind CSS & Vazirmatn**: Modern, responsive UI with premium Iranian typography.
 - **Multi-Language & Currency**: Dynamic RTL/LTR support for English/Persian and USD/Toman.
-
+---
 ### Folder Structure
 - `Controllers/`: User request orchestration.
 - `Data/`: DB Context and complex seeding logic.
@@ -64,49 +110,6 @@ Get instant insights into your company's health.
 docker-compose up --build
 ```
 
----
 
-## 📸 System Previews (English)
 
-| Dashboard | Chart of Accounts | Invoices |
-|-----------|-------------------|----------|
-| ![Dashboard](docs/screenshots/en/dashboard.png) | ![Accounts](docs/screenshots/en/accounts.png) | ![Invoices](docs/screenshots/en/invoices.png) |
-
----
-
-# دانیال‌نت اَکانت 🚀 (نسخه فارسی)
-
-**دانیال‌نت اَکانت** یک سیستم حسابداری و مدیریت مالی در سطح اینترپرایز برای شرکت‌های کوچک و متوسط (SMEs) است. این نرم‌افزار با استفاده از تکنولوژی‌های روز طراحی شده و راهکاری جامع برای حسابداری دوطرفه، مدیریت انبار و گزارش‌گیری مالی ارائه می‌دهد.
-
----
-
-## ✨ ویژگی‌های کلیدی
-
-### ۱. 📖 سیستم دفترداری دوطرفه
-قلب تپنده سیستم، دفتر کل مبتنی بر حسابداری دوطرفه است. تمام تراکنش‌ها اعتبارسنجی می‌شوند تا همیشه **جمع بدهکار = جمع بستانکار** باشد.
-- **ثبت سند داینامیک**: افزودن بی‌شمار ردیف به سند با محاسبه لحظه‌ای تراز توسط جاوااسکریپت.
-
-### ۲. 🌳 ساختار درختی حساب‌ها (کدینگ)
-مدیریت حساب‌ها در سطوح مختلف با قابلیت تعریف روابط والد-فرزندی و نمای درختی تعاملی.
-
-### ۳. 📦 موتور پیشرفته انبارداری
-ردیابی هوشمند موجودی با استفاده از الگوهای **FIFO** و **میانگین موزون**. همراه با سیستم جلوگیری از موجودی منفی.
-
-### ۴. 🧾 صدور فاکتور و یکپارچگی خرید/فروش
-فرآیند فروش و خرید متصل به دفتر کل و انبار.
-- **فاکتور خرید**: افزایش خودکار موجودی و ثبت سند بدهی/بانک.
-- **ثبت خودکار اسناد**: محاسبه لحظه‌ای بهای تمام شده و مالیات (۹٪).
-
-### ۵. 📊 داشبورد هوش مالی
-نمایش نمودارهای تحلیلی و گزارشات واقعی (تراز آزمایشی، سود و زیان، ترازنامه) با سرعت بالا.
-
----
-
-## 📸 پیش‌نمایش سیستم (فارسی)
-
-| داشبورد مدیریتی | ساختار حساب‌ها | مدیریت فاکتورها |
-|-----------|-------------------|----------|
-| ![Dashboard](docs/screenshots/fa/dashboard.png) | ![Accounts](docs/screenshots/fa/accounts.png) | ![Invoices](docs/screenshots/fa/invoices.png) |
-
----
 توسعه یافته با ❤️
